@@ -14,9 +14,19 @@ export function AuthPage() {
   const [dbStatus, setDbStatus] = useState(null);
 
   useEffect(() => {
-    checkHealthApi().then((health) => {
-      setDbStatus(health);
-    });
+    let isMounted = true;
+    const fetchHealth = () => {
+      checkHealthApi().then((health) => {
+        if (isMounted) setDbStatus(health);
+      });
+    };
+
+    fetchHealth();
+    const timer = setInterval(fetchHealth, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(timer);
+    };
   }, []);
 
   const [formData, setFormData] = useState({
@@ -69,7 +79,11 @@ export function AuthPage() {
         const user = await register(formData.name, formData.email, formData.password);
         navigate(redirectTarget || (user.role === "admin" ? "/admin" : "/shop"));
       } catch (err) {
-        setError(err.message || "Failed to create account.");
+        if (err.message && err.message.toLowerCase().includes("failed to fetch")) {
+          setError("Server is waking up on Render (free tier takes ~30-45s). Please wait 10 seconds and try again.");
+        } else {
+          setError(err.message || "Failed to create account.");
+        }
       }
     } else {
       if (!formData.email || !formData.password) {
@@ -90,7 +104,11 @@ export function AuthPage() {
           navigate("/shop");
         }
       } catch (err) {
-        setError(err.message || "Invalid email or password.");
+        if (err.message && err.message.toLowerCase().includes("failed to fetch")) {
+          setError("Server is waking up on Render (free tier takes ~30-45s). Please wait 10 seconds and try again.");
+        } else {
+          setError(err.message || "Invalid email or password.");
+        }
       }
     }
   };

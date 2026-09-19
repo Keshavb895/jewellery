@@ -1,6 +1,11 @@
 import { demoProducts } from "../data/demoProducts.js";
 
-const rawApiUrl = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").trim().replace(/\/+$/, "");
+const defaultApiUrl =
+  typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+    ? "https://jewellery-cls0.onrender.com/api"
+    : "http://localhost:5000/api";
+
+const rawApiUrl = (import.meta.env.VITE_API_URL || defaultApiUrl).trim().replace(/\/+$/, "");
 const API_BASE_URL = rawApiUrl.endsWith("/api") ? rawApiUrl : `${rawApiUrl}/api`;
 
 /**
