@@ -2126,34 +2126,47 @@ footer p {
   align-items: center;
 }
 
-.input-with-icon svg:first-child {
+.input-with-icon > svg:first-child {
   position: absolute;
   left: 12px;
   color: var(--muted);
   pointer-events: none;
+  z-index: 1;
 }
 
 .input-with-icon input {
   padding-left: 38px !important;
-  padding-right: 38px !important;
+  padding-right: 42px !important;
   width: 100%;
 }
 
 .pwd-toggle-btn {
   position: absolute;
   right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: 0;
   cursor: pointer;
   color: var(--muted);
-  padding: 4px;
-  display: flex;
+  padding: 6px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .pwd-toggle-btn:hover {
   color: var(--ink);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.pwd-toggle-btn svg {
+  position: static !important;
+  pointer-events: none;
+  display: block;
 }
 
 .auth-footer-note {

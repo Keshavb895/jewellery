@@ -20,6 +20,7 @@ export function AuthPage() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -185,6 +186,7 @@ export function AuthPage() {
                 type="button"
                 className="pwd-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 tabIndex="-1"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -198,13 +200,22 @@ export function AuthPage() {
               <div className="input-with-icon">
                 <Lock size={16} />
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="••••••••"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required={isRegister}
                 />
+                <button
+                  type="button"
+                  className="pwd-toggle-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  tabIndex="-1"
+                >
+                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
             </div>
           )}
