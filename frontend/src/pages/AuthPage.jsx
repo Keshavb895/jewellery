@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Eye, EyeOff, Lock, Mail, User, Sparkles, Shield, AlertCircle, Database } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User, AlertCircle, Database } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { checkHealthApi } from "../services/api.js";
 
@@ -44,15 +44,7 @@ export function AuthPage() {
     if (error) setError("");
   };
 
-  const fillDemo = (email, password) => {
-    setIsRegister(false);
-    setFormData((prev) => ({
-      ...prev,
-      email,
-      password,
-    }));
-    setError("");
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -176,28 +168,7 @@ export function AuthPage() {
           </button>
         </div>
 
-        {/* Demo Quick-Fill Buttons */}
-        <div className="demo-credentials-box">
-          <div className="demo-label">
-            <Sparkles size={14} /> Quick Demo Login:
-          </div>
-          <div className="demo-buttons-row">
-            <button
-              type="button"
-              className="demo-btn admin"
-              onClick={() => fillDemo("admin@aurelia.com", "admin123")}
-            >
-              <Shield size={12} /> Fill Admin (admin@aurelia.com)
-            </button>
-            <button
-              type="button"
-              className="demo-btn customer"
-              onClick={() => fillDemo("customer@aurelia.com", "customer123")}
-            >
-              <User size={12} /> Fill Customer (customer@aurelia.com)
-            </button>
-          </div>
-        </div>
+
 
         {error && (
           <div className="form-error-alert auth-alert">
