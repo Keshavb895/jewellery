@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Navbar } from "./components/layout/Navbar.jsx";
 import { Footer } from "./components/layout/Footer.jsx";
+import { LoadingScreen } from "./components/common/LoadingScreen.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { ProductDetailPage } from "./pages/ProductDetailPage.jsx";
 import { CartPage } from "./pages/CartPage.jsx";
@@ -22,11 +23,14 @@ import { ShopPage } from "./pages/ShopPage.jsx";
 import { ScrollObserver } from "./components/common/ScrollObserver.jsx";
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <AuthProvider>
       <ProductProvider>
         <CartProvider>
           <WishlistProvider>
+            {isLoading && <LoadingScreen onFinish={() => setIsLoading(false)} />}
             <div className="app-container">
               <ScrollObserver />
               <Navbar />

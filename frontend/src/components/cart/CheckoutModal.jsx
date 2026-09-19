@@ -509,7 +509,7 @@ export function CheckoutModal({ isOpen, onClose }) {
                           style={{ width: "15px", height: "15px", accentColor: "#8a6d2b" }}
                         />
                         <span style={{ fontSize: "12px", color: "#333", fontWeight: 500 }}>
-                          Save this delivery address to my Aurelia Address Book
+                          Save this delivery address to my Flash Jewels Address Book
                         </span>
                       </label>
                       {saveNewAddress && (
@@ -610,7 +610,7 @@ export function CheckoutModal({ isOpen, onClose }) {
                           </span>
                         </strong>
                         <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#666", lineHeight: 1.4 }}>
-                          Hand-packed in Aurelia's royal jewel vault box with satin ribbons and an artisanal deckled-edge stationery card.
+                          Hand-packed in Flash's royal jewel vault box with satin ribbons and an artisanal deckled-edge stationery card.
                         </p>
                       </div>
                     </label>
@@ -639,7 +639,7 @@ export function CheckoutModal({ isOpen, onClose }) {
                           }}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#888", marginTop: "4px" }}>
-                          <span>Sealed with signature Aurelia gold wax emblem</span>
+                          <span>Sealed with signature Flash gold wax emblem</span>
                           <span>{240 - giftMessage.length} characters remaining</span>
                         </div>
                       </div>

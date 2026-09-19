@@ -54,7 +54,7 @@ export function ScrollObserver() {
       );
 
       // Query all elements targeted for scroll animation
-      const selector = ".reveal, .reveal-up, .reveal-fade, .reveal-scale, .reveal-stagger, [data-reveal]";
+      const selector = ".reveal, .reveal-up, .reveal-fade, .reveal-scale, .reveal-stagger, .reveal-left, .reveal-right, [data-reveal]";
       const elements = document.querySelectorAll(selector);
 
       elements.forEach((el) => {

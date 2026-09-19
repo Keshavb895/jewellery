@@ -1,0 +1,188 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.scroll-stack-scroller.inner-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.4) transparent;
+}
+
+.scroll-stack-scroller.inner-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-stack-scroller.inner-scroll::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.4);
+  border-radius: 999px;
+}
+
+.scroll-stack-inner {
+  padding: 2vh 0 26rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.scroll-stack-card-wrapper {
+  position: relative;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  height: 620px;
+  width: calc(100% - 4vw);
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: relative;
+  background: #191614;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
+
+/* Card Hero Media and Content Styles */
+.stack-card-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+  transition: transform 0.8s ease;
+}
+
+.scroll-stack-card:hover .stack-card-media {
+  transform: scale(1.03);
+}
+
+.stack-card-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(14, 12, 10, 0.88) 0%,
+    rgba(14, 12, 10, 0.6) 45%,
+    rgba(0, 0, 0, 0.15) 85%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stack-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 8vw;
+  max-width: 680px;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.stack-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #e5be75;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.stack-card-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #fbfaf7;
+  margin: 0 0 14px;
+}
+
+.stack-card-title i {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.stack-card-desc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(251, 250, 247, 0.82);
+  margin: 0 0 24px;
+}
+
+.stack-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 12px 24px;
+  background: #fbfaf7;
+  color: #181614;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.stack-card-btn:hover {
+  background: #e5be75;
+  color: #0e0c0a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(229, 190, 117, 0.35);
+}
+
+@media (max-width: 768px) {
+  .scroll-stack-inner {
+    padding: 3vh 1rem 24rem;
+  }
+  .scroll-stack-card {
+    height: 480px;
+    width: calc(100% - 1.5rem);
+    margin: 0 auto;
+    border-radius: 20px;
+  }
+  .stack-card-content {
+    padding: 2.2rem 1.75rem;
+    max-width: 100%;
+  }
+  .stack-card-title {
+    font-size: 28px;
+  }
+  .stack-card-desc {
+    font-size: 13.5px;
+  }
+}

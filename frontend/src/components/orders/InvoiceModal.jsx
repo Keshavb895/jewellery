@@ -28,7 +28,7 @@ export function InvoiceModal({ order, isOpen, onClose }) {
   let items = [];
   if (Array.isArray(order.items)) {
     items = order.items.map((it) => ({
-      name: it.name || "Aurelia Fine Jewelry Piece",
+      name: it.name || "Flash Fine Jewelry Piece",
       quantity: Number(it.quantity) || 1,
       price: Number(it.price) || 0,
     }));
@@ -69,14 +69,14 @@ export function InvoiceModal({ order, isOpen, onClose }) {
           <div className="invoice-header">
             <div>
               <div className="invoice-logo">
-                AURELIA <span>JEWELS</span>
+                FLASH <span>JEWELS</span>
               </div>
               <p className="invoice-subhead">ATELIER & HIGH JEWELLERY GUILD</p>
               <div className="invoice-seller-info">
-                <span>Aurelia Jewels Luxury Retail Private Limited</span>
+                <span>Flash Jewels Luxury Retail Private Limited</span>
                 <span>GSTIN: 27AABCA1234F1Z8 | HSN Code: 7113</span>
                 <span>402, High Street Heritage Arcade, Bandra West, Mumbai, MH 400050</span>
-                <span>concierge@aureliajewels.com | +91 1800-209-8899</span>
+                <span>concierge@flashjewels.com | +91 1800-209-8899</span>
               </div>
             </div>
 
@@ -173,7 +173,7 @@ export function InvoiceModal({ order, isOpen, onClose }) {
             <div className="invoice-terms-col">
               <small>TERMS & CRAFTSMANSHIP GUARANTEE:</small>
               <ul>
-                <li>Every piece carries Aurelia's 1-Year Anti-Tarnish & Polish Warranty.</li>
+                <li>Every piece carries Flash Jewels's 1-Year Anti-Tarnish & Polish Warranty.</li>
                 <li>Includes Certificate of Authenticity & Hallmarking Assay Verification.</li>
                 <li>Complimentary 15-day return and exchange policy from delivery date.</li>
               </ul>
@@ -214,18 +214,18 @@ export function InvoiceModal({ order, isOpen, onClose }) {
           <div className="invoice-footer">
             <div className="seal-col">
               <div className="gold-seal-crest">
-                <span>AURELIA</span>
+                <span>FLASH</span>
                 <small>CERTIFIED</small>
               </div>
               <small className="system-gen-text">
-                This is a certified digital tax invoice issued by Aurelia Jewels Atelier.
+                This is a certified digital tax invoice issued by Flash Jewels Atelier.
               </small>
             </div>
 
             <div className="signature-col">
               <div className="signature-line"></div>
               <strong>Authorized Signatory</strong>
-              <small>Aurelia Jewels Guild Master</small>
+              <small>Flash Jewels Guild Master</small>
             </div>
           </div>
         </div>

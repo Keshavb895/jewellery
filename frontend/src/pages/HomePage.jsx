@@ -1,14 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowRight,
-  Truck,
-  RotateCcw,
-  Gift,
-  Award,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ProductGrid } from "../components/product/ProductGrid.jsx";
 import { ShopByCategory } from "../components/home/ShopByCategory.jsx";
+import { TrustFeatures } from "../components/home/TrustFeatures.jsx";
+import ScrollStack, { ScrollStackItem } from "../components/home/ScrollStack.jsx";
 import { useProducts } from "../context/ProductContext.jsx";
 
 export function HomePage() {
@@ -34,7 +30,17 @@ export function HomePage() {
     <main>
       {/* Hero Section */}
       <section className="hero">
-        <div className="heroimg"></div>
+        <div className="heroimg">
+          <img
+            src="/images/hero-banner.jpg"
+            alt="Flash Haute Joaillerie Edit"
+            className="hero-media-img"
+            loading="eager"
+            onError={(e) => {
+              e.currentTarget.src = "/images/categories/jewellery-sets.jpg";
+            }}
+          />
+        </div>
         <div className="heroText">
           <small>THE 2026 JEWELRY EDIT</small>
           <h1>
@@ -60,42 +66,22 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Trust & Guarantee Banner */}
-      <section
-        className="intro reveal-stagger"
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          flexWrap: "wrap",
-          gap: "20px",
-          padding: "24px 5vw",
-          borderBottom: "1px solid var(--line)",
-          background: "rgba(251, 250, 247, 0.8)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12.5px", color: "var(--ink)" }}>
-          <Truck size={17} color="#48634f" />
-          <span>Complimentary Express Delivery on orders ₹1,499+</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12.5px", color: "var(--ink)" }}>
-          <Award size={17} color="#8a6d2b" />
-          <span>Certified 18k Solid Vermeil & 925 Sterling Silver</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12.5px", color: "var(--ink)" }}>
-          <Gift size={17} color="#9b3151" />
-          <span>Artisanal Velvet Box Packaging & Gift Card</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12.5px", color: "var(--ink)" }}>
-          <RotateCcw size={17} color="#48634f" />
-          <span>15-Day Hassle-Free Exchange Guarantee</span>
-        </div>
-      </section>
-
       {/* Shop By Category Section (Reference Image Match) */}
       <ShopByCategory onSelectCategory={handleCategoryClick} />
 
+      {/* Luxury Trust & Value Propositions Bar */}
+      <TrustFeatures />
+
       {/* Curated Signature Creations */}
-      <section className="section" style={{ paddingTop: "40px", paddingBottom: "80px" }}>
+      <section
+        className="section signature-creations-section"
+        style={{
+          paddingTop: "60px",
+          paddingBottom: "80px",
+          background: "#faf7f2",
+          borderTop: "1px solid rgba(212, 175, 55, 0.15)",
+        }}
+      >
         <div className="heading reveal-up">
           <div>
             <small style={{ letterSpacing: "2.5px", textTransform: "uppercase", color: "#8a6d2b", fontWeight: 600, fontSize: "11px" }}>
@@ -127,21 +113,175 @@ export function HomePage() {
         )}
       </section>
 
+      {/* Editorial Lookbook ScrollStack Section */}
+      <section
+        className="scroll-stack-showcase-section"
+        style={{
+          width: "100%",
+          padding: "50px 0 30px",
+          margin: 0,
+          background: "#faf7f2",
+          borderTop: "1px solid rgba(229, 223, 214, 0.6)",
+        }}
+      >
+        <div className="heading reveal-up" style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 36px", padding: "0 20px" }}>
+          <div>
+            <small style={{ letterSpacing: "2.8px", textTransform: "uppercase", color: "#8a6d2b", fontWeight: 600, fontSize: "11px" }}>
+              EDITORIAL SHOWCASE
+            </small>
+            <h2 style={{ margin: "8px 0 10px" }}>The Flash Lookbook</h2>
+            <p style={{ color: "var(--muted)", fontSize: "14px", margin: 0 }}>
+              Scroll through our signature seasonal edits, sculpted with solid gold vermeil and natural gemstones.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ width: "100%", position: "relative" }}>
+          <ScrollStack
+            useWindowScroll={true}
+            itemDistance={90}
+            itemScale={0.035}
+            itemStackDistance={28}
+            baseScale={0.88}
+            stackPosition="120px"
+            scaleEndPosition="60px"
+          >
+            {/* Card 1 */}
+            <ScrollStackItem>
+              <img
+                src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1600&q=85"
+                alt="The Solstice & Celestial Edit"
+                className="stack-card-media"
+                loading="lazy"
+              />
+              <div className="stack-card-overlay" />
+              <div className="stack-card-content">
+                <span className="stack-card-tag">HAUTE JOAILLERIE EDIT</span>
+                <h3 className="stack-card-title">
+                  The Solstice &<br /><i>Celestial Edit</i>
+                </h3>
+                <p className="stack-card-desc">
+                  Flawlessly cut stones set in 18k solid gold vermeil, engineered to catch every beam of natural light.
+                </p>
+                <Link to="/shop?category=Necklaces" className="stack-card-btn">
+                  EXPLORE THE EDIT <ArrowRight size={14} />
+                </Link>
+              </div>
+            </ScrollStackItem>
+
+            {/* Card 2 */}
+            <ScrollStackItem>
+              <img
+                src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1600&q=85"
+                alt="Lustrous Baroque Pearls"
+                className="stack-card-media"
+                loading="lazy"
+              />
+              <div className="stack-card-overlay" />
+              <div className="stack-card-content">
+                <span className="stack-card-tag">HAND-KNOTTED HEIRLOOMS</span>
+                <h3 className="stack-card-title">
+                  Lustrous Organic<br /><i>Baroque Pearls</i>
+                </h3>
+                <p className="stack-card-desc">
+                  Hand-selected freshwater pearls with iridescent natural nacre, individually knotted on pure silk cord.
+                </p>
+                <Link to="/shop?category=Earrings" className="stack-card-btn">
+                  DISCOVER PEARLS <ArrowRight size={14} />
+                </Link>
+              </div>
+            </ScrollStackItem>
+
+            {/* Card 3 */}
+            <ScrollStackItem>
+              <img
+                src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1600&q=85"
+                alt="Architectural Statement Bands"
+                className="stack-card-media"
+                loading="lazy"
+              />
+              <div className="stack-card-overlay" />
+              <div className="stack-card-content">
+                <span className="stack-card-tag">CONTEMPORARY SCULPTING</span>
+                <h3 className="stack-card-title">
+                  Architectural<br /><i>Statement Bands</i>
+                </h3>
+                <p className="stack-card-desc">
+                  Weighty signets and geometric pavé bands contoured for effortless stacking from sunrise to dusk.
+                </p>
+                <Link to="/shop?category=Rings" className="stack-card-btn">
+                  SHOP RINGS <ArrowRight size={14} />
+                </Link>
+              </div>
+            </ScrollStackItem>
+
+            {/* Card 4 */}
+            <ScrollStackItem>
+              <img
+                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=85"
+                alt="Liquid Gold Herringbone Chains"
+                className="stack-card-media"
+                loading="lazy"
+              />
+              <div className="stack-card-overlay" />
+              <div className="stack-card-content">
+                <span className="stack-card-tag">ARTISANAL HERITAGE</span>
+                <h3 className="stack-card-title">
+                  Liquid Gold<br /><i>Herringbone Chains</i>
+                </h3>
+                <p className="stack-card-desc">
+                  Silky fluid links crafted to sit flush against the collarbone with effortless drape and liquid sheen.
+                </p>
+                <Link to="/shop?category=Necklaces" className="stack-card-btn">
+                  VIEW COLLECTION <ArrowRight size={14} />
+                </Link>
+              </div>
+            </ScrollStackItem>
+          </ScrollStack>
+        </div>
+      </section>
+
       {/* Story Banner */}
       <section className="story">
-        <div className="reveal-up">
-          <small>THE AURELIA STORY</small>
-          <h2>
-            Jewelry that
-            <br />
-            <i>lives with you.</i>
-          </h2>
-          <p>
-            From quiet mornings to unforgettable evenings, Aurelia creates modern heirlooms that feel personal, polished, and effortless to wear.
-          </p>
-          <Link className="button dark" to="/about" style={{ textDecoration: "none" }}>
-            DISCOVER OUR STORY
-          </Link>
+        <div className="story-grid">
+          <div className="story-content reveal-left">
+            <small>THE FLASH STORY</small>
+            <h2>
+              Jewelry that
+              <br />
+              <i>lives with you.</i>
+            </h2>
+            <p>
+              From quiet mornings to unforgettable evenings, Flash Jewels creates modern heirlooms that feel personal, polished, and effortless to wear.
+            </p>
+            <div className="story-badges">
+              <div className="story-badge">
+                <strong>100%</strong>
+                <span>Recycled 18k Vermeil</span>
+              </div>
+              <div className="story-badge">
+                <strong>Handcrafted</strong>
+                <span>Master Atelier Finish</span>
+              </div>
+            </div>
+            <Link className="button dark" to="/about" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              DISCOVER OUR STORY <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="story-media reveal-right">
+            <div className="story-img-frame">
+              <img
+                src="https://images.unsplash.com/photo-1531995811006-35cb42e1a022?auto=format&fit=crop&w=1200&q=85"
+                alt="Flash Artisanal Jewelry Craftsmanship"
+                className="story-img"
+                loading="lazy"
+              />
+              <div className="story-img-tag">
+                <span>ATELIER HERITAGE • HANDCRAFTED</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>

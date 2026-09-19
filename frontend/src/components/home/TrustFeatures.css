@@ -1,0 +1,129 @@
+/* ==========================================================================
+   AURELIA JEWELS — TRUST & VALUE PROPOSITIONS BAR
+   ========================================================================== */
+
+.trust-features-section {
+  background: linear-gradient(135deg, #1e2a42 0%, #2b3c5d 50%, #202d46 100%);
+  color: #ffffff;
+  padding: 50px 6vw;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background radiance effect */
+.trust-features-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 15%;
+  width: 500px;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.trust-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  max-width: 1320px;
+  margin: 0 auto;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.trust-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 8px 10px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trust-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Iconic circular badge / stroke frame */
+.trust-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  transition: all 0.3s ease;
+  margin-top: 2px;
+}
+
+.trust-card:hover .trust-icon-wrapper {
+  border-color: #f1dfba;
+  color: #f1dfba;
+  background: rgba(241, 223, 186, 0.12);
+  box-shadow: 0 0 18px rgba(241, 223, 186, 0.28);
+  transform: scale(1.05);
+}
+
+/* Text block */
+.trust-text {
+  flex: 1;
+}
+
+.trust-title {
+  margin: 0 0 6px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.trust-desc {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #cbd5e1;
+  font-weight: 400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .trust-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .trust-features-section {
+    padding: 38px 5vw;
+  }
+  .trust-features-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .trust-card {
+    gap: 16px;
+  }
+  .trust-icon-wrapper {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+  }
+  .trust-title {
+    font-size: 15px;
+  }
+  .trust-desc {
+    font-size: 12.5px;
+  }
+}

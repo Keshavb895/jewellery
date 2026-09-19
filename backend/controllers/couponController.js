@@ -6,6 +6,18 @@ let fallbackCoupons = [
   {
     _id: "coup_1",
     id: "coup_1",
+    code: "FLASH10",
+    discountType: "percentage",
+    discountValue: 10,
+    minOrderAmount: 1499,
+    maxDiscount: 2000,
+    isActive: true,
+    expiryDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
+    usageCount: 14,
+  },
+  {
+    _id: "coup_1b",
+    id: "coup_1b",
     code: "AURELIA10",
     discountType: "percentage",
     discountValue: 10,

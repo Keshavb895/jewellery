@@ -374,7 +374,7 @@ export function ProfilePage() {
                   style={{ background: "#f5f3ef", cursor: "not-allowed", color: "#666" }}
                 />
                 <small style={{ color: "var(--muted)", fontSize: "11px", marginTop: "3px" }}>
-                  Email is locked as your Aurelia account identifier.
+                  Email is locked as your Flash Jewels account identifier.
                 </small>
               </div>
 

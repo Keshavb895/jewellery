@@ -71,7 +71,7 @@ export function Navbar() {
       </button>
 
       <Link className="logo" to="/" onClick={closeMenu}>
-        AURELIA <span>JEWELS</span>
+        FLASH <span>JEWELS</span>
       </Link>
 
       <nav className={`navlinks ${mobileMenuOpen ? "show" : ""}`}>

@@ -138,6 +138,48 @@ const productsData = [
     isNewArrival: true,
     rating: 4.8,
     reviewCount: 33
+  },
+  {
+    name: "Ophelia Emerald Pendant Necklace",
+    slug: "ophelia-emerald-pendant-necklace",
+    sku: "AJ-NK-007",
+    categorySlug: "necklaces",
+    price: 3499,
+    mrp: 4899,
+    discount: 28,
+    material: "18k Yellow Gold Vermeil & Lab Emerald",
+    finish: "High Gloss Polish",
+    color: "Emerald / Gold",
+    size: "42 cm + 5 cm extension",
+    images: ["https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=900&q=85"],
+    description: "A deep forest-green oval emerald cut with vintage faceting, framed in a halo of micropavé cubic zirconia on a dainty diamond-cut cable chain.",
+    stock: 28,
+    isFeatured: true,
+    isTrending: true,
+    isNewArrival: true,
+    rating: 4.9,
+    reviewCount: 31
+  },
+  {
+    name: "Vesper Pavé Huggie Hoops",
+    slug: "vesper-pave-huggie-hoops",
+    sku: "AJ-ER-008",
+    categorySlug: "earrings",
+    price: 1499,
+    mrp: 2199,
+    discount: 31,
+    material: "18k Gold Vermeil & Cubic Zirconia",
+    finish: "High Polish",
+    color: "Gold / Clear",
+    size: "12 mm diameter",
+    images: ["https://images.unsplash.com/photo-1629224316810-9d8805b95e76?auto=format&fit=crop&w=900&q=85"],
+    description: "Minimalist everyday mini hoops encrusted with shimmering pavé crystal stones. Features a secure seamless click closure.",
+    stock: 65,
+    isFeatured: true,
+    isTrending: true,
+    isNewArrival: true,
+    rating: 4.9,
+    reviewCount: 54
   }
 ];
 

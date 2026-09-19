@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer>
       <div>
-        <strong>AURELIA JEWELS</strong>
+        <strong>FLASH JEWELS</strong>
         <p>Everyday elegance, made yours. Timeless craftsmanship, modern silhouettes.</p>
       </div>
       <div className="footer-links">
@@ -19,7 +19,7 @@ export function Footer() {
         </Link>
       </div>
       <div>
-        <p>© {new Date().getFullYear()} Aurelia Jewels. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Flash Jewels. All rights reserved.</p>
       </div>
     </footer>
   );

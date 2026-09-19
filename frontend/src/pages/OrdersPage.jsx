@@ -28,7 +28,7 @@ function normalizeCustomerOrder(o) {
   let items = [];
   if (Array.isArray(o.items)) {
     items = o.items.map((it) => ({
-      name: it.name || "Aurelia Jewelry Piece",
+      name: it.name || "Flash Jewelry Piece",
       quantity: Number(it.quantity) || 1,
       price: Number(it.price) || 0,
       image:
@@ -234,7 +234,7 @@ export function OrdersPage() {
         ) : (
           <div style={{ background: "#fffdfa", border: "1px solid #e2d9cd", padding: "14px 20px", marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
             <div>
-              <strong style={{ fontSize: "14px", display: "block", color: "var(--ink)" }}>Have an Aurelia Jewels account?</strong>
+              <strong style={{ fontSize: "14px", display: "block", color: "var(--ink)" }}>Have a Flash Jewels account?</strong>
               <p style={{ margin: "2px 0 0", fontSize: "12.5px", color: "var(--muted)" }}>
                 Sign in to view all orders linked to your email, or search using your Order ID below.
               </p>
@@ -283,7 +283,7 @@ export function OrdersPage() {
         {loading && orders.length === 0 ? (
           <div className="orders-loading-box">
             <RefreshCw size={28} className="spin-icon" />
-            <p>Retrieving your order records from Aurelia Vault...</p>
+            <p>Retrieving your order records from Flash Vault...</p>
           </div>
         ) : orders.length > 0 ? (
           <div className="orders-list">
@@ -486,7 +486,7 @@ export function OrdersPage() {
             </div>
             <h2>Sign In to View Your Orders</h2>
             <p style={{ maxWidth: "460px", margin: "10px auto 24px" }}>
-              Log in to your Aurelia Jewels account to access your personal order history, live dispatch updates, and luxury tax invoices.
+              Log in to your Flash Jewels account to access your personal order history, live dispatch updates, and luxury tax invoices.
             </p>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
               <Link to="/login" className="button dark">

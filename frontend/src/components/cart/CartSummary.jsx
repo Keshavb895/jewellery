@@ -55,7 +55,7 @@ export function CartSummary() {
                 borderRadius: "12px",
                 border: isSyncing ? "1px solid #ebd9b9" : "1px solid #cce3d2",
               }}
-              title="Your bag is automatically synchronized to your Aurelia account across devices"
+              title="Your bag is automatically synchronized to your Flash Jewels account across devices"
             >
               <span
                 style={{
@@ -122,7 +122,7 @@ export function CartSummary() {
             <form onSubmit={handleApplyCoupon} style={{ display: "flex", gap: "6px" }}>
               <input
                 type="text"
-                placeholder="PROMO CODE (e.g. AURELIA10)"
+                placeholder="PROMO CODE (e.g. FLASH10)"
                 value={couponInput}
                 onChange={(e) => {
                   setCouponInput(e.target.value.toUpperCase());

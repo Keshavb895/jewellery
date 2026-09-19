@@ -12,7 +12,7 @@ export function AboutPage() {
           <i>yours.</i>
         </h1>
         <p>
-          Aurelia Jewels is an independent jewelry house born from the belief that everyday pieces should feel exceptional.
+          Flash Jewels is an independent jewelry house born from the belief that everyday pieces should feel exceptional.
           We unite timeless craftsmanship with modern, lightweight silhouettes designed to be lived in.
         </p>
         <Link className="button dark" to="/shop">

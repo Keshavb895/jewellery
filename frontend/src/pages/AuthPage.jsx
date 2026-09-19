@@ -93,11 +93,11 @@ export function AuthPage() {
     <main className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <small>AURELIA JEWELS</small>
+          <small>FLASH JEWELS</small>
           <h1>{isRegister ? "Create an Account" : "Welcome Back"}</h1>
           <p>
             {isRegister
-              ? "Join Aurelia Jewels for personalized curation, wishlists, and order tracking."
+              ? "Join Flash Jewels for personalized curation, wishlists, and order tracking."
               : "Sign in to access your saved pieces, bag, and bespoke orders."}
           </p>
         </div>
