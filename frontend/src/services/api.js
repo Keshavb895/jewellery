@@ -584,9 +584,9 @@ export async function deleteCouponApi(id) {
 /**
  * Get cloud-synced cart from MongoDB Atlas
  */
-export async function getCartApi() {
+export async function getCartApi(tokenOverride) {
   try {
-    const token = localStorage.getItem("aurelia_auth_token");
+    const token = tokenOverride || localStorage.getItem("aurelia_auth_token");
     if (!token) return { items: [] };
 
     const response = await fetch(`${API_BASE_URL}/cart`, {
@@ -605,9 +605,9 @@ export async function getCartApi() {
 /**
  * Sync entire cart to MongoDB Atlas in background
  */
-export async function syncCartApi(items) {
+export async function syncCartApi(items, tokenOverride) {
   try {
-    const token = localStorage.getItem("aurelia_auth_token");
+    const token = tokenOverride || localStorage.getItem("aurelia_auth_token");
     if (!token) return { items };
 
     const response = await fetch(`${API_BASE_URL}/cart`, {
@@ -631,9 +631,9 @@ export async function syncCartApi(items) {
 /**
  * Merge local guest cart into MongoDB Atlas cloud cart upon login
  */
-export async function mergeCartApi(guestItems) {
+export async function mergeCartApi(guestItems, tokenOverride) {
   try {
-    const token = localStorage.getItem("aurelia_auth_token");
+    const token = tokenOverride || localStorage.getItem("aurelia_auth_token");
     if (!token) return { items: guestItems };
 
     const response = await fetch(`${API_BASE_URL}/cart/merge`, {

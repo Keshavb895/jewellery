@@ -72,6 +72,12 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const data = await loginUserApi(email, password);
+      if (data.token) {
+        localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
+      }
+      if (data.user) {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+      }
       setUser(data.user);
       setToken(data.token);
       return data.user;
@@ -84,6 +90,12 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const data = await registerUserApi(name, email, password);
+      if (data.token) {
+        localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
+      }
+      if (data.user) {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+      }
       setUser(data.user);
       setToken(data.token);
       return data.user;
@@ -93,8 +105,6 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
     try {
       localStorage.removeItem(USER_STORAGE_KEY);
       localStorage.removeItem(TOKEN_STORAGE_KEY);
@@ -103,6 +113,8 @@ export function AuthProvider({ children }) {
     } catch {
       // Ignore
     }
+    setUser(null);
+    setToken(null);
   };
 
   const updateUser = (updatedFields) => {

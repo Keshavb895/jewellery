@@ -4,33 +4,31 @@ import { getCartApi, syncCartApi, mergeCartApi } from "../services/api.js";
 
 const CartContext = createContext();
 
-const CART_STORAGE_KEY = "aurelia_cart_v2";
+const GUEST_CART_KEY = "flash_guest_cart";
+const AUTH_CART_KEY = "flash_user_cart";
 
 export function CartProvider({ children }) {
-  const { token, isAuthenticated } = useAuth();
+  const { token, user, isAuthenticated } = useAuth();
+  const activeTokenRef = useRef(token);
+  const prevTokenRef = useRef(token);
+  const prevEmailRef = useRef(user?.email || null);
+  const hasHydratedRef = useRef(false);
 
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      const currentToken = localStorage.getItem("aurelia_auth_token");
+      const storageKey = currentToken ? AUTH_CART_KEY : GUEST_CART_KEY;
+      const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
       }
-      // Migrate older aurelia_cart if present
-      const old = localStorage.getItem("aurelia_cart");
-      if (old) {
-        const oldParsed = JSON.parse(old);
-        if (Array.isArray(oldParsed)) {
-          const grouped = [];
-          for (const item of oldParsed) {
-            const existing = grouped.find((x) => (x.id || x._id) === (item.id || item._id));
-            if (existing) {
-              existing.quantity += 1;
-            } else {
-              grouped.push({ ...item, quantity: 1 });
-            }
-          }
-          return grouped;
+      // Migrate legacy key if present and not logged in
+      if (!currentToken) {
+        const legacy = localStorage.getItem("aurelia_cart_v2") || localStorage.getItem("aurelia_cart");
+        if (legacy) {
+          const parsed = JSON.parse(legacy);
+          if (Array.isArray(parsed)) return parsed;
         }
       }
     } catch {
@@ -42,87 +40,139 @@ export function CartProvider({ children }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [cloudSynced, setCloudSynced] = useState(false);
   const syncTimeoutRef = useRef(null);
-  const lastMergedTokenRef = useRef(null);
-  const isMergingRef = useRef(false);
 
-  // Synchronously write to localStorage on any cart state update (0ms latency for UI)
+  // Synchronously write to localStorage (guest cart when unauthenticated, auth cart when logged in)
   useEffect(() => {
     try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      const storageKey = token ? AUTH_CART_KEY : GUEST_CART_KEY;
+      localStorage.setItem(storageKey, JSON.stringify(cart));
     } catch {
       // Ignore write errors
     }
-  }, [cart]);
+  }, [cart, token]);
 
-  // Auth / Login change: merge guest cart items with MongoDB cloud cart
+  // Auth / Login / Logout lifecycle handling
   useEffect(() => {
+    activeTokenRef.current = token;
+
+    // Clear any pending sync timeout
+    if (syncTimeoutRef.current) {
+      clearTimeout(syncTimeoutRef.current);
+      syncTimeoutRef.current = null;
+    }
+
+    const hasTokenChanged = prevTokenRef.current !== token;
+    const hasUserChanged = prevEmailRef.current && user?.email && prevEmailRef.current !== user.email;
+
+    prevTokenRef.current = token;
+    prevEmailRef.current = user?.email || null;
+
     if (!token) {
-      lastMergedTokenRef.current = null;
+      // User logged out or guest mode
+      hasHydratedRef.current = true;
       setCloudSynced(false);
+
+      if (hasTokenChanged) {
+        // Clear React state and auth storage so previous user's cart never leaks
+        setCart([]);
+        try {
+          localStorage.removeItem(AUTH_CART_KEY);
+        } catch {
+          // Ignore
+        }
+      }
       return;
     }
 
-    // Only merge once per token session
-    if (lastMergedTokenRef.current === token) return;
-    lastMergedTokenRef.current = token;
+    // User is logged in: Hydrate cart from MongoDB Atlas
+    hasHydratedRef.current = false;
+    setCloudSynced(false);
 
-    let isCancelled = false;
-    async function performLoginMerge() {
-      isMergingRef.current = true;
+    const sessionToken = token;
+
+    async function hydrateUserCart() {
       setIsSyncing(true);
       try {
-        const currentGuestCart = (() => {
-          try {
-            const saved = localStorage.getItem(CART_STORAGE_KEY);
-            return saved ? JSON.parse(saved) : [];
-          } catch {
-            return [];
+        // Check for guest items added prior to login
+        let guestItems = [];
+        try {
+          const savedGuest = localStorage.getItem(GUEST_CART_KEY);
+          if (savedGuest) {
+            const parsed = JSON.parse(savedGuest);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              guestItems = parsed;
+            }
           }
-        })();
+        } catch {
+          guestItems = [];
+        }
 
-        const response = await mergeCartApi(currentGuestCart);
-        if (!isCancelled && response && Array.isArray(response.items)) {
+        let response;
+        if (guestItems.length > 0) {
+          // Merge local guest items into the user's cloud cart
+          response = await mergeCartApi(guestItems, sessionToken);
+          try {
+            localStorage.removeItem(GUEST_CART_KEY);
+            localStorage.removeItem("aurelia_cart_v2");
+            localStorage.removeItem("aurelia_cart");
+          } catch {
+            // Ignore
+          }
+        } else {
+          // Cleanly retrieve user's cloud cart from MongoDB
+          response = await getCartApi(sessionToken);
+        }
+
+        // Only update state if this session is still the active one
+        if (activeTokenRef.current === sessionToken && response && Array.isArray(response.items)) {
           setCart(response.items);
-          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(response.items));
+          try {
+            localStorage.setItem(AUTH_CART_KEY, JSON.stringify(response.items));
+          } catch {
+            // Ignore
+          }
           setCloudSynced(true);
+          hasHydratedRef.current = true;
         }
       } catch (err) {
-        console.warn("Could not merge cart with cloud:", err.message);
+        console.warn("Could not load cart from cloud:", err.message);
+        if (activeTokenRef.current === sessionToken) {
+          hasHydratedRef.current = true;
+        }
       } finally {
-        if (!isCancelled) {
+        if (activeTokenRef.current === sessionToken) {
           setIsSyncing(false);
-          // Allow normal background debounced updates after merge settles
-          setTimeout(() => {
-            isMergingRef.current = false;
-          }, 500);
         }
       }
     }
 
-    performLoginMerge();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [token]);
+    hydrateUserCart();
+  }, [token, user?.email]);
 
   // Debounced background sync to MongoDB Atlas when authenticated
   useEffect(() => {
-    if (!token || isMergingRef.current) return;
+    // CRITICAL: NEVER sync to MongoDB if unauthenticated OR before cart has hydrated from the cloud!
+    if (!token || !hasHydratedRef.current) return;
 
     if (syncTimeoutRef.current) {
       clearTimeout(syncTimeoutRef.current);
     }
 
+    const sessionToken = token;
     syncTimeoutRef.current = setTimeout(async () => {
+      if (activeTokenRef.current !== sessionToken) return;
       try {
         setIsSyncing(true);
-        await syncCartApi(cart);
-        setCloudSynced(true);
+        await syncCartApi(cart, sessionToken);
+        if (activeTokenRef.current === sessionToken) {
+          setCloudSynced(true);
+        }
       } catch (err) {
         console.warn("Background cart sync failed:", err.message);
       } finally {
-        setIsSyncing(false);
+        if (activeTokenRef.current === sessionToken) {
+          setIsSyncing(false);
+        }
       }
     }, 600);
 
@@ -205,12 +255,14 @@ export function CartProvider({ children }) {
     setCart([]);
     setAppliedCoupon(null);
     try {
-      localStorage.removeItem(CART_STORAGE_KEY);
+      localStorage.removeItem(AUTH_CART_KEY);
+      localStorage.removeItem(GUEST_CART_KEY);
+      localStorage.removeItem("aurelia_cart_v2");
     } catch {
       // Ignore
     }
     if (token) {
-      syncCartApi([]).catch((e) => console.warn("Failed to clear cloud cart:", e));
+      syncCartApi([], token).catch((e) => console.warn("Failed to clear cloud cart:", e));
     }
   };
 

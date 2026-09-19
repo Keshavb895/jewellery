@@ -29,19 +29,20 @@ function normalizeCartItem(item) {
  */
 export async function getCart(req, res) {
   try {
-    const userId = req.user._id ? req.user._id.toString() : req.user.id;
+    const userId = (req.user._id || req.user.id).toString();
 
     if (!isDbConnected()) {
-      const items = fallbackCarts.get(userId) || [];
+      const items = (fallbackCarts.get(userId) || []).map(normalizeCartItem);
       return res.json({ items });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id || req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json({ items: user.cart || [] });
+    const items = (user.cart || []).map(normalizeCartItem);
+    return res.json({ items });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -54,7 +55,7 @@ export async function getCart(req, res) {
  */
 export async function syncCart(req, res) {
   try {
-    const userId = req.user._id ? req.user._id.toString() : req.user.id;
+    const userId = (req.user._id || req.user.id).toString();
     const { items = [] } = req.body;
 
     const normalizedItems = Array.isArray(items) ? items.map(normalizeCartItem) : [];
@@ -64,7 +65,7 @@ export async function syncCart(req, res) {
       return res.json({ items: normalizedItems, synced: true });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id || req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -72,7 +73,7 @@ export async function syncCart(req, res) {
     user.cart = normalizedItems;
     await user.save();
 
-    return res.json({ items: user.cart, synced: true });
+    return res.json({ items: user.cart.map(normalizeCartItem), synced: true });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -85,7 +86,7 @@ export async function syncCart(req, res) {
  */
 export async function mergeCart(req, res) {
   try {
-    const userId = req.user._id ? req.user._id.toString() : req.user.id;
+    const userId = (req.user._id || req.user.id).toString();
     const { guestItems = [] } = req.body;
 
     let existingItems = [];
@@ -93,9 +94,9 @@ export async function mergeCart(req, res) {
     if (!isDbConnected()) {
       existingItems = fallbackCarts.get(userId) || [];
     } else {
-      const user = await User.findById(req.user._id);
+      const user = await User.findById(req.user._id || req.user.id);
       if (user) {
-        existingItems = (user.cart || []).map((it) => it.toObject ? it.toObject() : it);
+        existingItems = (user.cart || []).map((it) => (it.toObject ? it.toObject() : it));
       }
     }
 
@@ -105,19 +106,23 @@ export async function mergeCart(req, res) {
     // 1. Seed with existing cloud cart
     existingItems.forEach((item) => {
       const norm = normalizeCartItem(item);
-      mergedMap.set(norm.id, norm);
+      if (norm.id) {
+        mergedMap.set(norm.id, norm);
+      }
     });
 
     // 2. Merge guest items from localStorage
     if (Array.isArray(guestItems)) {
       guestItems.forEach((guestItem) => {
         const norm = normalizeCartItem(guestItem);
-        if (mergedMap.has(norm.id)) {
-          const existing = mergedMap.get(norm.id);
-          const maxStock = existing.stock || 25;
-          existing.quantity = Math.min(maxStock, existing.quantity + norm.quantity);
-        } else {
-          mergedMap.set(norm.id, norm);
+        if (norm.id) {
+          if (mergedMap.has(norm.id)) {
+            const existing = mergedMap.get(norm.id);
+            const maxStock = existing.stock || 25;
+            existing.quantity = Math.min(maxStock, existing.quantity + norm.quantity);
+          } else {
+            mergedMap.set(norm.id, norm);
+          }
         }
       });
     }
@@ -129,7 +134,7 @@ export async function mergeCart(req, res) {
       return res.json({ items: mergedList, merged: true });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id || req.user.id);
     if (user) {
       user.cart = mergedList;
       await user.save();
