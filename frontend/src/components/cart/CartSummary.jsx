@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext.jsx";
-import { ArrowRight, ShieldCheck, Truck, Tag, Check, X } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, Tag, Check, X, Lock } from "lucide-react";
 import { CheckoutModal } from "./CheckoutModal.jsx";
 import { validateCouponApi } from "../../services/api.js";
 
 export function CartSummary() {
+  const navigate = useNavigate();
   const { subtotal, shipping, discount, total, appliedCoupon, applyCoupon, removeCoupon, isSyncing, isAuthenticated } = useCart();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [couponInput, setCouponInput] = useState("");
@@ -183,13 +185,29 @@ export function CartSummary() {
           <strong>₹{total.toLocaleString("en-IN")}</strong>
         </div>
 
-        <button
-          type="button"
-          className="button dark full"
-          onClick={() => setIsCheckoutOpen(true)}
-        >
-          PROCEED TO CHECKOUT <ArrowRight size={16} />
-        </button>
+        {isAuthenticated ? (
+          <button
+            type="button"
+            className="button dark full"
+            onClick={() => setIsCheckoutOpen(true)}
+          >
+            PROCEED TO CHECKOUT <ArrowRight size={16} />
+          </button>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <button
+              type="button"
+              className="button dark full"
+              onClick={() => navigate("/login?redirect=/cart")}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+            >
+              <Lock size={15} /> SIGN IN TO CHECKOUT <ArrowRight size={16} />
+            </button>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textAlign: "center" }}>
+              Please sign in or create an account to place your order securely.
+            </span>
+          </div>
+        )}
 
         <p className="summary-guarantee">
           <ShieldCheck size={14} /> 100% Secure Checkout & 15-Day Free Returns

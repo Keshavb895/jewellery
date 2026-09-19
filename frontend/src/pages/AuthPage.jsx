@@ -62,9 +62,12 @@ export function AuthPage() {
         return;
       }
 
+      const searchParams = new URLSearchParams(location.search);
+      const redirectTarget = searchParams.get("redirect");
+
       try {
         const user = await register(formData.name, formData.email, formData.password);
-        navigate("/shop");
+        navigate(redirectTarget || (user.role === "admin" ? "/admin" : "/shop"));
       } catch (err) {
         setError(err.message || "Failed to create account.");
       }
@@ -74,9 +77,14 @@ export function AuthPage() {
         return;
       }
 
+      const searchParams = new URLSearchParams(location.search);
+      const redirectTarget = searchParams.get("redirect");
+
       try {
         const user = await login(formData.email, formData.password);
-        if (user.role === "admin") {
+        if (redirectTarget) {
+          navigate(redirectTarget);
+        } else if (user.role === "admin") {
           navigate("/admin");
         } else {
           navigate("/shop");

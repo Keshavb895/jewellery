@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, MapPin, Truck, ShieldCheck, CheckCircle2, AlertCircle, CreditCard, Banknote, Gift, Printer, Star, Home, Briefcase, Bookmark } from "lucide-react";
+import { X, MapPin, Truck, ShieldCheck, CheckCircle2, AlertCircle, CreditCard, Banknote, Gift, Printer, Star, Home, Briefcase, Bookmark, Lock } from "lucide-react";
 import { useCart } from "../../context/CartContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useProducts } from "../../context/ProductContext.jsx";
@@ -61,6 +61,64 @@ export function CheckoutModal({ isOpen, onClose }) {
   }, [isOpen, isAuthenticated, user]);
 
   if (!isOpen) return null;
+
+  if (!isAuthenticated) {
+    return (
+      <div className="modal-backdrop" onClick={onClose}>
+        <div
+          className="modal-container checkout-modal-container"
+          onClick={(e) => e.stopPropagation()}
+          style={{ maxWidth: "450px", textAlign: "center", padding: "40px 30px" }}
+        >
+          <div
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              background: "#fcf8f2",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 16px",
+              color: "#8a6d2b",
+            }}
+          >
+            <Lock size={24} />
+          </div>
+          <small
+            style={{
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              fontSize: "11px",
+              fontWeight: 600,
+            }}
+          >
+            Account Required
+          </small>
+          <h2 style={{ fontSize: "22px", margin: "8px 0 12px" }}>Sign In to Complete Order</h2>
+          <p style={{ fontSize: "13px", color: "var(--muted)", marginBottom: "24px", lineHeight: "1.5" }}>
+            To protect your orders, ensure verified doorstep delivery, and track shipments in real time, please sign in or register an account.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <button
+              type="button"
+              className="button dark"
+              onClick={() => {
+                onClose();
+                navigate("/login?redirect=/cart");
+              }}
+            >
+              SIGN IN / REGISTER
+            </button>
+            <button type="button" className="button outline" onClick={onClose}>
+              CANCEL
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const applySavedAddress = (addr) => {
     const addrId = addr._id || addr.id;

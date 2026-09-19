@@ -13,6 +13,10 @@ let fallbackOrders = [];
  */
 export async function createOrder(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Please log in or create an account to place an order." });
+    }
+
     const {
       items = [],
       shippingAddress = {},
@@ -78,10 +82,10 @@ export async function createOrder(req, res) {
 
     const orderData = {
       orderNumber,
-      user: req.user?._id || null,
-      customerName: customerName || shippingAddress.fullName || req.user?.name || "Customer",
-      customerEmail: customerEmail || req.user?.email || "",
-      customerPhone: customerPhone || shippingAddress.phone || "",
+      user: req.user._id || req.user.id,
+      customerName: customerName || shippingAddress.fullName || req.user.name || "Customer",
+      customerEmail: req.user.email || customerEmail || "",
+      customerPhone: customerPhone || shippingAddress.phone || req.user.phone || "",
       items: normalized,
       shippingAddress,
       subtotal,
