@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Eye, EyeOff, Lock, Mail, User, AlertCircle, Database } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User, AlertCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { checkHealthApi } from "../services/api.js";
 
 export function AuthPage() {
   const location = useLocation();
@@ -11,23 +10,7 @@ export function AuthPage() {
 
   const isRegisterInitial = location.pathname === "/register";
   const [isRegister, setIsRegister] = useState(isRegisterInitial);
-  const [dbStatus, setDbStatus] = useState(null);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchHealth = () => {
-      checkHealthApi().then((health) => {
-        if (isMounted) setDbStatus(health);
-      });
-    };
-
-    fetchHealth();
-    const timer = setInterval(fetchHealth, 4000);
-    return () => {
-      isMounted = false;
-      clearInterval(timer);
-    };
-  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -118,31 +101,7 @@ export function AuthPage() {
           </p>
         </div>
 
-        {dbStatus && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "7px 12px",
-              borderRadius: "6px",
-              fontSize: "12px",
-              marginBottom: "16px",
-              backgroundColor: dbStatus.databaseConnected ? "rgba(34, 197, 94, 0.08)" : "rgba(239, 68, 68, 0.08)",
-              color: dbStatus.databaseConnected ? "#15803d" : "#b91c1c",
-              border: `1px solid ${dbStatus.databaseConnected ? "rgba(34, 197, 94, 0.25)" : "rgba(239, 68, 68, 0.25)"}`,
-            }}
-          >
-            <Database size={13} style={{ flexShrink: 0 }} />
-            <span>
-              {dbStatus.databaseConnected ? (
-                <>Database: <strong>MongoDB Atlas Connected</strong> (Saved to cloud)</>
-              ) : (
-                <>Database: <strong>Demo Fallback Mode</strong> (MongoDB offline / IP not whitelisted)</>
-              )}
-            </span>
-          </div>
-        )}
+
 
         {/* Mode Switcher Tabs */}
         <div className="auth-tabs">
